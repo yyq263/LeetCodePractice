@@ -1,2 +1,2 @@
 # LeetCodePractice
-Solve problems from LeetCode via C
+Solve LeetCode problems via C.
