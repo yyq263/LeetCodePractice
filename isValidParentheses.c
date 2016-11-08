@@ -35,7 +35,7 @@ bool isValid(char* s) {
     stack *mystack = NULL;
     stack *top;
 
-    if (len == 0 || len % 2 == 1)
+    if (len == 0 || len % 22)
         return false;
     
     while(i < len) {
