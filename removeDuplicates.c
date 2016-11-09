@@ -14,7 +14,8 @@ int removeDuplicates(int* nums, int numsSize) {
         {
             nums[i + 1] = nums[j];
             i++; j++;
-        } else {
+        } else
+        {
             j++;
         }
     }
