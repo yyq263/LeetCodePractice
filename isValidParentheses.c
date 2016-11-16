@@ -19,7 +19,7 @@ void stack_push(stack **l, char parenthesis) {
 
 // need free
 stack *stack_pop(stack **l) {
-    stack *p;
+    stack *p = NULL;
     if (*l != NULL)
     {
         p = *l;
