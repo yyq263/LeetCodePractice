@@ -5,15 +5,13 @@
 
 typedef struct stack{
     int candidate;
-    int index;
     struct stack *next;
 } stack;
 
-void stack_push(stack **l, int candidate, int index) { //Remember the index too.
+void stack_push(stack **l, int candidate) { //Remember the index too.
     stack *p;
     p = (stack*)malloc(sizeof(stack));
     p->candidate = candidate;
-    p->index = index;
     // insert to top
     p->next = *l;
     *l = p;
@@ -64,59 +62,24 @@ int cmpInt ( const void *a , const void *b )
     
 
 void searchForRoute(int* candidate, int candidateIndex, int size, int target, int sum, stack** route, int **ans, int* ansIndex, int *ansLen) {
-    stack* pop;
-    int nextIndex = 0;
 
-    while(sum < target)
+    int i;
+    if (sum > target)
+        return;
+    if (sum == target)
     {
-
-        sum += candidate[candidateIndex];
-        stack_push(route, candidate[candidateIndex], candidateIndex);
-        printf("candidate=%d\n", candidate[candidateIndex]);
-        //printf("sum=%d\n", sum);
-        if (sum == target)
-        {
-            ans[*ansIndex] = rememberRoute(*route, &ansLen[*ansIndex]);
-            *ansIndex += 1;
-        }
+        ans[*ansIndex] = rememberRoute(*route, &ansLen[*ansIndex]);
+        *ansIndex += 1;
+        return;
     }
-    pop = stack_pop(route); // Pop the element that makes the sum of route greater than or equal to target.
-    if (pop != NULL)
+    for (i = candidateIndex; i < size; i++)
     {
-        //printf("pop=%d\n", pop->candidate);
-        nextIndex = pop->index + 1;
-        sum -= pop->candidate;
+        stack_push(route, candidate[i]);
+        searchForRoute(candidate, i, size, target, sum+candidate[i], route, ans, ansIndex, ansLen);
+        stack* pop = stack_pop(route);
         free(pop);
-    }
 
-    pop = stack_pop(route); // Pop twice makes sense because we have an ordered array!
-    if (pop != NULL)
-    {
-        //printf("pop=%d\n", pop->candidate);
-        nextIndex = pop->index + 1;
-        sum -= pop->candidate;
-        free(pop);
     }
-    printf("nextIndex: %d\n", nextIndex);
-    printf("size: %d\n", size);
-    if (nextIndex >= size)// If there are entries left...
-    {
-        printf("routeIndex=%d\n", (*route)->index);
-        if (*route != NULL && ((*route)->index + 1) < size)
-        {
-            printf("1\n");
-            pop = stack_pop(route);
-            nextIndex = pop->index + 1;
-            sum -= pop->candidate;
-            free(pop);
-            searchForRoute(candidate, nextIndex, size, target, sum, route, ans, ansIndex, ansLen);
-        }
-        else
-            return;
-    }
-    else
-        searchForRoute(candidate, nextIndex, size, target, sum, route, ans, ansIndex, ansLen);
-    
 }
 
 /**
